@@ -1,0 +1,17 @@
+name: CnRFlow-0.9.0
+channels:
+ - conda-forge
+ - bioconda
+ - defaults
+dependencies:
+ - python
+ - fastqc
+ - samtools
+ - picard
+ - bamtools
+ - bedtools
+ - deeptools
+ - multiqc
+ - bowtie2
+ - trimmomatic
+ - sambamba
