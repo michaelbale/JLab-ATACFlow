@@ -25,16 +25,16 @@ The typical command for running the pipeline is as follows:
 
 Mandatory arguments:
 ```
---input                       Path to input data (must be surrounded with quotes)
+--input						  Path to input data (must be surrounded with quotes)
 
---genome                      Name of Genomes reference (current supported: mouse10 -- mm10, mouse39 -- mm39, human -- hg38)
+--genome					  Name of Genomes reference (current supported: mouse10 -- mm10, mouse39 -- mm39, human -- hg38)
 							  For mouse, unless beginning new project, likely better to keep to mm10 (03/04/2022).
 
 -profile                      Name of package manager system (available: docker, singularity, conda);
                               for WCM default -- singularity is recommended, but conda works while docker 
                               does not. For minimal - use conda.
 
---peaks/--no-peaks            Specifies whether or not to call peaks using HMMRATAC (default: --no-peaks)
+--peaks/--no-peaks			  Specifies whether or not to call peaks using HMMRATAC (default: --no-peaks)
 
 --min-replicates			  Requires --peaks; minimum number of replicates required for overlapping of 
 							  individual peak calls to consensus peak calls using ChIP-r.
@@ -71,7 +71,7 @@ Options:
 ## Citations
 
 
-Requirements:
+## Requirements:
 
 nextflow v20 or higher
 
