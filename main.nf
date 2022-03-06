@@ -245,7 +245,7 @@ process filterPrimaryAln {
 
 }
 
-if(params.callPeaks) {
+if(params.peaks) {
     process callHMMRATAC {
 	    tag "Calling peaks using HMMRATAC"
 		publishDir "$params.outdir/peakcalls/HMMRATACCalls-narrowPeak", mode: 'copy', pattern: '*.narrowPeak'
@@ -268,7 +268,7 @@ if(params.callPeaks) {
 		"""
 	}
 	
-	if(minReplicates > 0) {
+	if(params.minReplicates > 0) {
 	    def getGroupID {
 			(it =~ /(.+)\.rep\d+/)[0][1]
 		}
