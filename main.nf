@@ -257,13 +257,13 @@ if(params.peaks) {
 		output:
 		tuple sampleID, file("${sampleID}_peaks.narrowPeak") into narrowPeaks_ch
 				
-		script:
+		shell:
 		"""
-		sambamba index ${bam}
-		samtools view -H ${bam} | perl -ne 'if(/^@SQ.*?SN:(\w+)\s+LN:(\d+)/){print \$1,"\t",\$2,"\n"}' > genome.info
+		sambamba index !{bam}
+		samtools view -H !{bam} | perl -ne 'if(/^@SQ.*?SN:(\w+)\s+LN:(\d+)/){print $1,"\t",$2,"\n"}' > genome.info
 		
-		java -Xms10g -Xmx200g -jar HMMRATAC_1.2.10_exe.jar -b ${bam} -i ${sampleID}_final.bam.bai -g genome.info -o ${sampleID}
-		awk -v OFS='\t' '{print \$1, \$2, \$3, \$4, "1", "1", \$13, "-1", "-1"}' ${sampleID}_peaks.gappedPeak > ${sampleID}_peaks.narrowPeak
+		java -Xms10g -Xmx200g -jar HMMRATAC_1.2.10_exe.jar -b !{bam} -i !{sampleID}_final.bam.bai -g genome.info -o !{sampleID}
+		awk -v OFS='\t' '{print $1, $2, $3, $4, "1", "1", $13, "-1", "-1"}' !{sampleID}_peaks.gappedPeak > !{sampleID}_peaks.narrowPeak
 		"""
 	}
 	
