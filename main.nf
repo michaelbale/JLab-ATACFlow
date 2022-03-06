@@ -95,7 +95,7 @@ if (params.citations) {
 
 log.info """\
 		=================================================
-            C U T & R U N  P I P E L I N E v${version}
+            A T A C S E Q   P I P E L I N E v${version}
         =================================================
 		Author: Michael J. Bale (mib4004@med.cornell.edu)
 		
@@ -140,7 +140,6 @@ if(params.catLanes) {
 		gzip ${sampleID}_R2_init.fq
 		"""
 	  }
-	}
 } else {
     Channel
       .fromFilePairs(params.input)
