@@ -4,6 +4,7 @@ params.genomes = []
 params.bt2_index = params.genome ? params.genomes[ params.genome ].bt2Index ?: false : false
 params.blacklist = params.genome ? params.genomes[ params.genome ].blacklist ?: false : false
 params.genesList = params.genome ? params.genomes[ params.genome ].genesList ?: false : false
+params.genomeInfo = params.genome ? params.genomes[ params.genome ].genomeInfo ?: false : false
 params.help = false
 params.citations = false
 
@@ -257,14 +258,12 @@ if(params.peaks) {
 		output:
 		tuple sampleID, file("${sampleID}_peaks.narrowPeak") into narrowPeaks_ch
 				
-		shell:
-		'''
-		sambamba index !{bam}
-		samtools view -H !{bam} | perl -ne 'if(/^@SQ.*?SN:(\w+)\s+LN:(\d+)/){print $1,"\t",$2,"\n"}' > genome.info
-		
-		java -Xms10g -Xmx200g -jar HMMRATAC_1.2.10_exe.jar -b !{bam} -i !{sampleID}_final.bam.bai -g genome.info -o !{sampleID}
-		awk -v OFS='\t' '{print $1, $2, $3, $4, "1", "1", $13, "-1", "-1"}' !{sampleID}_peaks.gappedPeak > !{sampleID}_peaks.narrowPeak
-		'''
+		script:
+		"""
+		sambamba index ${bam}		
+		java -Xms10g -Xmx200g -jar HMMRATAC_1.2.10_exe.jar -b ${bam} -i ${sampleID}_final.bam.bai -g genome.info -o ${sampleID}
+		awk -v OFS='\t' '{print \$1, \$2, \$3, \$4, "1", "1", \$13, "-1", "-1"}' ${sampleID}_peaks.gappedPeak > ${sampleID}_peaks.narrowPeak
+		"""
 	}
 	
 	if(params.minReplicates > 0) {
