@@ -30,7 +30,7 @@ def helpMessage() {
 
 --peaks		  			      Specifies to call peaks using HMMRATAC (default: --no-peaks)
 
---min-replicates			  Requires --peaks; minimum number of replicates required for overlapping of 
+--minReplicates			  Requires --peaks; minimum number of replicates required for overlapping of 
 							  individual peak calls to consensus peak calls using ChIP-r.
 
 
@@ -233,7 +233,7 @@ process filterPrimaryAln {
 	path("${sampleID}_idxstats.log") into idxstats_ch
 	path("${sampleID}_insertSizes.log") into picardISStats_ch
 	path("${sampleID}_dups.log") into picardDupStats_ch
-	tuple sampleID, file("${sampleID}_final.bam") into finalBam_ch
+	tuple sampleID, file("${sampleID}_final.bam") into finalBam_ch, bamForPeaks_ch
 	file("${sampleID}_final.bam") into forPCA_ch, forBEPImage_ch
 	val(sampleID) into names_ch
 	
@@ -246,7 +246,59 @@ process filterPrimaryAln {
 }
 
 if(params.callPeaks) {
-
+    process callHMMRATAC {
+	    tag "Calling peaks using HMMRATAC"
+		publishDir "$params.outdir/peakcalls/HMMRATACCalls-narrowPeak", mode: 'copy', pattern: '*.narrowPeak'
+		label 'big_mem'
+		
+		
+		input:
+		tuple val(sampleID), path(bam) from bamForPeaks_ch
+		
+		output:
+		tuple sampleID, file("${sampleID}_peaks.narrowPeak") into narrowPeaks_ch
+				
+		script:
+		"""
+		sambamba index ${bam}
+		samtools view -H ${bam} | perl -ne 'if(/^@SQ.*?SN:(\w+)\s+LN:(\d+)/){print $1,"\t",$2,"\n"}' > genome.info
+		
+		java -Xms10g -Xmx200g -jar HMMRATAC_1.2.10_exe.jar -b ${bam} -i ${sampleID}_final.bam.bai -g genome.info -o ${sampleID}
+		awk -v OFS='\t' '{print $1, $2, $3, $4, "1", "1", $13, "-1", "-1"}' ${sampleID}_peaks.gappedPeak > ${sampleID}_peaks.narrowPeak
+		"""
+	}
+	
+	if(minReplicates > 0) {
+	    def getGroupID {
+			(it =~ /(.+)\.rep\d+/)[0][1]
+		}
+		
+		Channel
+		  .from(narrowPeaks_ch)
+		  .mix()
+		  .map{ groupID, peakFile -> tuple(getGroupID(groupID), peakFile) }
+		  .groupTuple()
+		  .set { groupedNarrowPeaks_ch}
+		
+		process ChIPr {
+		    tag "Finding $groupID consensus peaks with ChIP-r"
+			publishDir "$params.outdir/peakcalls/", mode: 'copy', pattern: '*optimal*'
+			label 'med_mem'
+			
+			input:
+			val(minRep) from params.minReplicates
+			tuple val(groupID), path(narrowPeaks)
+			
+			output:
+			file("${groupID}_optimalPeaks.bed")
+			
+			script:
+			"""
+			ChIP-r -i "$narrowPeaks" -o ${groupID} -m $minRep --rankmethod signalvalue
+			"""
+		}
+		
+	}
   
 }
 
