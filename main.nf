@@ -273,7 +273,7 @@ if(params.peaks) {
 		
 		Channel
 		  .from(narrowPeaks_ch)
-		  .mix()
+		  .collect()
 		  .map{ groupID, peakFile -> tuple(getGroupID(groupID), peakFile) }
 		  .groupTuple()
 		  .set { groupedNarrowPeaks_ch}
