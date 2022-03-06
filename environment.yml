@@ -15,3 +15,4 @@ dependencies:
  - bowtie2
  - trimmomatic
  - sambamba
+ - chip-r
