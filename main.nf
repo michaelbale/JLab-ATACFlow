@@ -268,7 +268,7 @@ if(params.peaks) {
 	}
 	
 	if(params.minReplicates > 0) {
-	    def getGroupID {
+	    getGroupID = {
 			(it =~ /(.+)\.rep\d+/)[0][1]
 		}
 		
