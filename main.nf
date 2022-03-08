@@ -271,12 +271,12 @@ if(params.peaks) {
 	
 	if(params.minReplicates > 0) {
 	    getGroupID = {
-			(it =~ (/.+)\.rep\d+/)[0][1]
+			(it =~ /(.+)\.rep\d+/)[0][1]
 		}
 		
 		narrowPeaks_ch
 		  .map{ groupID, peakFile -> tuple(getGroupID(groupID), peakFile) }
-		  .collect()
+		  .toList()
 		  .groupTuple()
 		  .view()
 		  .set { groupedNarrowPeaks_ch}
