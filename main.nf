@@ -276,7 +276,8 @@ if(params.peaks) {
 		
 		narrowPeaks_ch
 		  .map{ groupID, peakFile -> tuple(getGroupID(groupID), peakFile) }
-		  .collect()
+		  .toList()
+		  .buffer( size: 2 )
 		  .groupTuple()
 		  .view()
 		  .set { groupedNarrowPeaks_ch}
