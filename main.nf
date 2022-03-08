@@ -274,6 +274,10 @@ if(params.peaks) {
 			(it =~ /(.+)\.rep\d+/)[0][1]
 		}
 		
+		narrowPeaks_ch
+		  .collect()
+		  .view()
+		/*
 		Channel
 		  .from(narrowPeaks_ch)
 		  .collect()
@@ -281,7 +285,7 @@ if(params.peaks) {
 		  //.groupTuple()
 		  .view()
 		  //.set { groupedNarrowPeaks_ch}
-		/*
+		
 		process ChIPr {
 		    tag "Finding $groupID consensus peaks with ChIP-r"
 			publishDir "$params.outdir/peakcalls/", mode: 'copy', pattern: '*optimal*'
