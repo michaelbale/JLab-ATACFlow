@@ -285,7 +285,6 @@ if(params.peaks) {
 			label 'med_mem'
 			
 			input:
-			val(minRep) from params.minReplicates
 			tuple val(groupID), path(narrowPeaks)
 			
 			output:
@@ -293,7 +292,7 @@ if(params.peaks) {
 			
 			script:
 			"""
-			ChIP-r -i $narrowPeaks -o ${groupID} -m $minRep --rankmethod signalvalue
+			ChIP-r -i $narrowPeaks -o ${groupID} -m 2 --rankmethod signalvalue
 			"""
 		}
 		
