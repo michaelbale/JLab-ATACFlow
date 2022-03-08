@@ -264,7 +264,7 @@ if(params.peaks) {
 		script:
 		"""
 		sambamba index ${bam}		
-		java -Xms10g -Xmx100g -jar ${baseDir}/bin/HMMRATAC_V1.2.10_exe.jar -b ${bam} -i ${sampleID}_final.bam.bai -g ${genomeInfo} -o ${sampleID}
+		java -jar ${baseDir}/bin/HMMRATAC_V1.2.10_exe.jar -b ${bam} -i ${sampleID}_final.bam.bai -g ${genomeInfo} -o ${sampleID}
 		awk -v OFS='\t' '{print \$1, \$2, \$3, \$4, "1", "1", \$13, "-1", "-1"}' ${sampleID}_peaks.gappedPeak > ${sampleID}_peaks.narrowPeak
 		"""
 	}
