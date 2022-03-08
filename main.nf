@@ -279,14 +279,7 @@ if(params.peaks) {
 		  .collect()
 		  .groupTuple()
 		  .view()
-		/*
-		Channel
-		  .from(narrowPeaks_ch)
-		  .collect()
-		  //.map{ groupID, peakFile -> tuple(getGroupID(groupID), peakFile) }
-		  //.groupTuple()
-		  .view()
-		  //.set { groupedNarrowPeaks_ch}
+		  .set { groupedNarrowPeaks_ch}
 		
 		process ChIPr {
 		    tag "Finding $groupID consensus peaks with ChIP-r"
@@ -305,7 +298,7 @@ if(params.peaks) {
 			ChIP-r -i $narrowPeaks -o ${groupID} -m $minRep --rankmethod signalvalue
 			"""
 		}
-		*/
+		
 		
 	}
   
