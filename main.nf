@@ -279,8 +279,9 @@ if(params.peaks) {
 		  .collect()
 		  .map{ groupID, peakFile -> tuple(getGroupID(groupID), peakFile) }
 		  .groupTuple()
-		  .set { groupedNarrowPeaks_ch}
-		
+		  .view()
+		  //.set { groupedNarrowPeaks_ch}
+		/*
 		process ChIPr {
 		    tag "Finding $groupID consensus peaks with ChIP-r"
 			publishDir "$params.outdir/peakcalls/", mode: 'copy', pattern: '*optimal*'
@@ -298,6 +299,7 @@ if(params.peaks) {
 			ChIP-r -i $narrowPeaks -o ${groupID} -m $minRep --rankmethod signalvalue
 			"""
 		}
+		*/
 		
 	}
   
