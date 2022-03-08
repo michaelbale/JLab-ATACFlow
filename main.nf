@@ -254,6 +254,8 @@ if(params.peaks) {
 		
 		input:
 		tuple val(sampleID), path(bam) from bamForPeaks_ch
+		file(genomeInfo) from params.geno
+		
 		
 		output:
 		tuple sampleID, file("${sampleID}_peaks.narrowPeak") into narrowPeaks_ch
@@ -261,7 +263,7 @@ if(params.peaks) {
 		script:
 		"""
 		sambamba index ${bam}		
-		java -Xms10g -Xmx200g -jar ${baseDir}/bin/HMMRATAC_V1.2.10_exe.jar -b ${bam} -i ${sampleID}_final.bam.bai -g genome.info -o ${sampleID}
+		java -Xms10g -Xmx200g -jar ${baseDir}/bin/HMMRATAC_V1.2.10_exe.jar -b ${bam} -i ${sampleID}_final.bam.bai -g $genomeInfo -o ${sampleID}
 		awk -v OFS='\t' '{print \$1, \$2, \$3, \$4, "1", "1", \$13, "-1", "-1"}' ${sampleID}_peaks.gappedPeak > ${sampleID}_peaks.narrowPeak
 		"""
 	}
