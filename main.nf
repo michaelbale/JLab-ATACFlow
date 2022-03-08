@@ -292,7 +292,7 @@ if(params.peaks) {
 			
 			script:
 			"""
-			ChIP-r -i $narrowPeaks -o ${groupID} -m 2 --rankmethod signalvalue
+			ChIP-r -i ${narrowPeaks} -o ${groupID} -m 2 --rankmethod signalvalue
 			"""
 		}
 		
