@@ -254,7 +254,8 @@ if(params.peaks) {
 		
 		input:
 		tuple val(sampleID), path(bam) from bamForPeaks_ch
-		file(genomeInfo) from params.geno
+		file(genomeInfo) from params.genomeInfo
+		
 		
 		
 		output:
