@@ -276,6 +276,8 @@ if(params.peaks) {
 		
 		narrowPeaks_ch
 		  .collect()
+		  .map{ groupID, peakFile -> tuple(getGroupID(groupID), peakFile) }
+		  .groupTuple()
 		  .view()
 		/*
 		Channel
