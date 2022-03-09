@@ -289,7 +289,7 @@ if(params.peaks) {
 			tuple val(setID), path(narrowPeaks) from groupedNarrowPeaks_ch
 			
 			output:
-			file("${setID}_optimalPeaks.bed")
+			file("${setID}_optimal.bed")
 			
 			script:
 			"""

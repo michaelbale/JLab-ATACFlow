@@ -21,7 +21,7 @@ Author: Michael J. Bale (mib4004@med.cornell.edu)
 
 The typical command for running the pipeline is as follows:
 
-`nextflow run michaelbale/JLab-ATACFlow --input 'data/*_R{1,2}.fastq.gz' --genome mouse [--no-peaks | --peaks [--min-replicates n]] -profile singularity`
+`nextflow run michaelbale/JLab-ATACFlow --input 'data/*_R{1,2}.fastq.gz' --genome mouse [--peaks [--min-replicates n]] -profile singularity`
 
 Mandatory arguments:
 ```
@@ -34,7 +34,9 @@ Mandatory arguments:
                               for WCM default -- singularity is recommended, but conda works while docker 
                               does not. For minimal - use conda.
 
---peaks/--no-peaks			  Specifies whether or not to call peaks using HMMRATAC (default: --no-peaks)
+--peaks			  			  Specifies whether or not to call peaks using HMMRATAC (default: will not call peaks)
+							  N.B. do not do if running locally/without an HPC -- won't work well. Can still stop
+							  at BAM file and call using <insert favorite peak-caller here>
 
 --min-replicates			  Requires --peaks; minimum number of replicates required for overlapping of 
 							  individual peak calls to consensus peak calls using ChIP-r.
