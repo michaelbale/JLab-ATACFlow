@@ -271,7 +271,7 @@ if(params.peaks) {
 	
 	if(params.minReplicates > 0) {
 	    getGroupID = {
-			(it =~ /(.+)\.rep\d+/)[0][1]
+			(it =~ /(.+)-rep\d+/)[0][1]
 		}
 		
 		narrowPeaks_ch
