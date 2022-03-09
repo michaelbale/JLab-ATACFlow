@@ -285,14 +285,15 @@ if(params.peaks) {
 			label 'med_mem'
 			
 			input:
-			tuple val(groupID), path(narrowPeaks)
+			val(numRep) from params.minReplicates
+			tuple val(setID), path(narrowPeaks) from groupedNarrowPeaks_ch
 			
 			output:
-			file("${groupID}_optimalPeaks.bed")
+			file("${setID}_optimalPeaks.bed")
 			
 			script:
 			"""
-			ChIP-r -i ${narrowPeaks} -o ${groupID} -m 2 --rankmethod signalvalue
+			ChIP-r -i ${narrowPeaks} -o ${setID} -m 2 --rankmethod signalvalue
 			"""
 		}
 		
